@@ -1,0 +1,40 @@
+{
+  "name": "react-native-multiple-tags",
+  "version": "0.0.1",
+  "description": "Multiple Select using Tags",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caleb-tolu/react-native-multiple-tags.git"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "react",
+    "native",
+    "multiple",
+    "select",
+    "tags",
+    "multiple",
+    "select",
+    "list",
+    "multiple",
+    "select",
+    "with",
+    "search",
+    "radio",
+    "button"
+  ],
+  "author": "Caleb Tolu",
+  "license": "MIT",
+  "dependencies": {
+    "eslint": "^4.5.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.2.1"
+  }
+}
