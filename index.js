@@ -131,7 +131,7 @@ const {
   showEachAvailTags,
   notFoundStyle,
   showAvailTagsViewNotFound,
- } = styles;
+} = styles;
 
 
 class MultipleTags extends Component {
@@ -204,18 +204,18 @@ class MultipleTags extends Component {
     this.searchFilterTag = this.filteredTags;
     if (typeof this.searchFilterTag[this.searchFilterTag.length - 1] !== 'undefined') {
       const AvailableTags = this.searchFilterTag.map(item =>
-          (
-            <TouchableOpacity
-              key={item}
-              style={showEachAvailTags}
-              onPress={() => this.addTag(item)}
-            >
-              <Text style={eachTagIconAdd} >
-                <Icon name="ios-add-circle-outline" size={15} />
-              </Text>
-              <Text>{ item } </Text>
-            </TouchableOpacity>
-         ));
+        (
+          <TouchableOpacity
+            key={item}
+            style={showEachAvailTags}
+            onPress={() => this.addTag(item)}
+          >
+            <Text style={eachTagIconAdd} >
+              <Icon name="ios-add-circle-outline" size={15} />
+            </Text>
+            <Text>{ item } </Text>
+          </TouchableOpacity>
+        ));
 
       return (
         <View style={showAvailTagsView}>
@@ -236,18 +236,18 @@ class MultipleTags extends Component {
     this.selectedTag = this.state.selectedTag;
     if (typeof this.selectedTag[this.selectedTag.length - 1] !== 'undefined') {
       const SelectedTags = this.selectedTag.map(item =>
-          (
-            <TouchableOpacity
-              key={item}
-              style={eachTag}
-              onPress={() => this.removeTag(item)}
-            >
-              <Text>{item}</Text>
-              <Text style={eachTagIcon} >
-                <Icon name="ios-trash-outline" size={15} />
-              </Text>
-            </TouchableOpacity>
-         ));
+        (
+          <TouchableOpacity
+            key={item}
+            style={eachTag}
+            onPress={() => this.removeTag(item)}
+          >
+            <Text>{item}</Text>
+            <Text style={eachTagIcon} >
+              <Icon name="ios-trash-outline" size={15} />
+            </Text>
+          </TouchableOpacity>
+        ));
 
       return SelectedTags;
     }
@@ -291,21 +291,21 @@ class MultipleTags extends Component {
           !this.state.show || (
             <View style={selectTagsWrapper}>
               {
-              !search || (
-                this.state.searchFilterTag.length === 0 || (
-                  <View style={tagSearchWrapper}>
-                    <TextInput
-                      style={textInputStyle}
-                      value={this.state.previousCharacter}
-                      underlineColorAndroid="transparent"
-                      onChangeText={value => this.setTagsBasedOnQuery(value)}
-                      placeholder="Search"
-                    />
-                    <Icon style={iconStyle} size={20} name="ios-search-outline" />
-                  </View>
+                !search || (
+                  this.state.searchFilterTag.length === 0 || (
+                    <View style={tagSearchWrapper}>
+                      <TextInput
+                        style={textInputStyle}
+                        value={this.state.previousCharacter}
+                        underlineColorAndroid="transparent"
+                        onChangeText={value => this.setTagsBasedOnQuery(value)}
+                        placeholder="Search"
+                      />
+                      <Icon style={iconStyle} size={20} name="ios-search-outline" />
+                    </View>
+                  )
                 )
-              )
-            }
+              }
 
               {
                 this.state.searchFilterTag.length === 0 || (
@@ -322,7 +322,7 @@ class MultipleTags extends Component {
       </View>
     );
   }
- }
+}
 
 MultipleTags.propTypes = {
   tags: PropTypes.array.isRequired,
