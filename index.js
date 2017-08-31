@@ -6,40 +6,31 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const styles = {
   body: {
     flex: 1,
-    minHeight: 60,
+    maxHeight: 130,
   },
   showTagsWrapper: {
-    flex: 1,
-    marginTop: 10,
-    marginBottom: 10,
     minHeight: 40,
-    maxHeight: 80,
+    maxHeight: 40,
     alignItems: 'center',
     flexDirection: 'row',
   },
   selectTagsWrapper: {
-    flex: 5,
+    height: 70,
   },
   tagSearchWrapper: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 10,
     paddingTop: 5,
     borderRadius: 3,
-    maxHeight: 40,
+    maxHeight: 30,
+    height: 30,
     borderWidth: 1,
     borderColor: '#d4d5d6',
     marginBottom: 5,
   },
   showTagsContainer: {
-    height: null,
-    maxHeight: 100,
-    flex: 1,
-    bottom: 0,
-    borderRadius: 3,
-    borderWidth: 1,
-    borderColor: '#d4d5d6',
+    height: 30,
   },
   textInputStyle: {
     flex: 1,
@@ -75,15 +66,14 @@ const styles = {
   },
   showAvailTagsView: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     alignItems: 'center',
-    padding: 5,
   },
   showAvailTagsViewNotFound: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
+    paddingLeft: 0,
   },
   showEachAvailTags: {
     padding: 2,
@@ -103,7 +93,7 @@ const styles = {
     fontWeight: '500',
   },
   textActionBtn: {
-    flex: 1,
+    maxHeight: 20,
     flexDirection: 'row',
   },
   btnAction: {
@@ -310,7 +300,7 @@ class MultipleTags extends Component {
               {
                 this.state.searchFilterTag.length === 0 || (
                   <View style={showTagsContainer}>
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                       {this.showAvailableTags()}
                     </ScrollView>
                   </View>
@@ -328,15 +318,16 @@ MultipleTags.propTypes = {
   tags: PropTypes.array.isRequired,
   onChangeItem: PropTypes.func.isRequired,
   search: PropTypes.bool,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   defaultMessage: PropTypes.string,
   selectCompletedMessage: PropTypes.string,
 };
 
 MultipleTags.defaultProps = {
   search: true,
+  title: 'Tags',
   selectCompletedMessage: 'No match was found',
-  defaultMessage: 'Press the arrow button to pick a tag',
+  defaultMessage: 'Press the down arrow button to pick a tag',
 };
 
 export default MultipleTags;
