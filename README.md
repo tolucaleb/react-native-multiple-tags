@@ -114,7 +114,7 @@ export default WelcomeComponent;
 | defaultMessage | No |  First Message to instruct what to do,
 
 # Note
-Use this component inside a scrollview or flatlist for it to maintain its styling.
+Use this component inside a scrollview for it to maintain its auto height.
 
 
 # Todo
