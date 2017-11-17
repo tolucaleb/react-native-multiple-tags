@@ -179,7 +179,7 @@ class MultipleTags extends Component {
   }
 
   showAvailableTags() {
-    const { selectCompletedMessage } = this.props;
+    const { selectCompletedMessage, sizeIconTag } = this.props;
     this.newValue = this.state.previousCharacter;
     this.filteredTags = [];
     this.selectedTag = this.state.selectedTag;
@@ -201,7 +201,7 @@ class MultipleTags extends Component {
             onPress={() => this.addTag(item)}
           >
             <Text style={eachTagIconAdd} >
-              <Icon name="ios-add-circle-outline" size={15} />
+              <Icon name="ios-add-circle-outline" size={sizeIconTag} />
             </Text>
             <Text>{ item } </Text>
           </TouchableOpacity>
@@ -222,7 +222,7 @@ class MultipleTags extends Component {
   }
 
   showSelectedTags() {
-    const { defaultMessage } = this.props;
+    const { defaultMessage, sizeIconTag } = this.props;
     this.selectedTag = this.state.selectedTag;
     if (typeof this.selectedTag[this.selectedTag.length - 1] !== 'undefined') {
       const SelectedTags = this.selectedTag.map(item =>
@@ -234,7 +234,7 @@ class MultipleTags extends Component {
           >
             <Text>{item}</Text>
             <Text style={eachTagIcon} >
-              <Icon name="ios-trash-outline" size={15} />
+              <Icon name="ios-trash-outline" size={sizeIconTag} />
             </Text>
           </TouchableOpacity>
         ));
@@ -256,7 +256,7 @@ class MultipleTags extends Component {
   }
 
   render() {
-    const { search, title } = this.props;
+    const { search, title} = this.props;
     return (
       <View style={body}>
         <View style={textActionBtn}>
@@ -321,6 +321,7 @@ MultipleTags.propTypes = {
   title: PropTypes.string,
   defaultMessage: PropTypes.string,
   selectCompletedMessage: PropTypes.string,
+  sizeIconTag : PropTypes.number
 };
 
 MultipleTags.defaultProps = {
@@ -328,6 +329,7 @@ MultipleTags.defaultProps = {
   title: 'Tags',
   selectCompletedMessage: 'No match was found',
   defaultMessage: 'Press the down arrow button to pick a tag',
+  sizeIconTag : 15,
 };
 
 export default MultipleTags;
