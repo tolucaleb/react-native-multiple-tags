@@ -141,6 +141,7 @@ class MultipleTags extends Component {
 
   componentWillMount() {
     this.setAvailableTags(this.props.tags);
+    this.setState({show : this.props.visibleOnOpen});
   }
 
   setAvailableTags(tags) {
@@ -327,6 +328,7 @@ MultipleTags.propTypes = {
   showIconAdd : PropTypes.bool,
   labelActiveTag : PropTypes.object,
   tagActiveStyle : PropTypes.object,
+  visibleOnOpen : PropTypes.bool,
 };
 
 MultipleTags.defaultProps = {
@@ -337,7 +339,8 @@ MultipleTags.defaultProps = {
   sizeIconTag : 15,
   showIconAdd : true,
   labelActiveTag : styles.labelActiveTag,
-  tagActiveStyle : {}
+  tagActiveStyle : {},
+  visibleOnOpen : false,
 };
 
 export default MultipleTags;
