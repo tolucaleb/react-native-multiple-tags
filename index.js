@@ -182,7 +182,7 @@ class MultipleTags extends Component {
   }
 
   showAvailableTags() {
-    const { selectCompletedMessage, sizeIconTag, showIconAdd, labelActiveTag } = this.props;
+    const { selectCompletedMessage, sizeIconTag, showIconAdd, labelActiveTag, tagActiveStyle } = this.props;
     this.newValue = this.state.previousCharacter;
     this.filteredTags = [];
     this.selectedTag = this.state.selectedTag;
@@ -200,7 +200,7 @@ class MultipleTags extends Component {
         (
           <TouchableOpacity
             key={item}
-            style={showEachAvailTags}
+            style={[showEachAvailTags, tagActiveStyle]}
             onPress={() => this.addTag(item)}
           >
 
@@ -325,7 +325,8 @@ MultipleTags.propTypes = {
   selectCompletedMessage: PropTypes.string,
   sizeIconTag : PropTypes.number,
   showIconAdd : PropTypes.bool,
-  labelActiveTag : PropTypes.object
+  labelActiveTag : PropTypes.object,
+  tagActiveStyle : PropTypes.object,
 };
 
 MultipleTags.defaultProps = {
@@ -335,7 +336,8 @@ MultipleTags.defaultProps = {
   defaultMessage: 'Press the down arrow button to pick a tag',
   sizeIconTag : 15,
   showIconAdd : true,
-  labelActiveTag : styles.labelActiveTag
+  labelActiveTag : styles.labelActiveTag,
+  tagActiveStyle : {}
 };
 
 export default MultipleTags;
