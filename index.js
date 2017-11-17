@@ -101,6 +101,9 @@ const styles = {
     justifyContent: 'flex-start',
     marginLeft: 5,
   },
+  labelActiveTag : {
+      fontSize : 14,
+  }
 
 };
 
@@ -179,7 +182,7 @@ class MultipleTags extends Component {
   }
 
   showAvailableTags() {
-    const { selectCompletedMessage, sizeIconTag, showIconAdd} = this.props;
+    const { selectCompletedMessage, sizeIconTag, showIconAdd, labelActiveTag } = this.props;
     this.newValue = this.state.previousCharacter;
     this.filteredTags = [];
     this.selectedTag = this.state.selectedTag;
@@ -200,8 +203,9 @@ class MultipleTags extends Component {
             style={showEachAvailTags}
             onPress={() => this.addTag(item)}
           >
+
             {showIconAdd && <Text> <Icon name="ios-add-circle-outline" size={sizeIconTag} /> </Text> }
-            <Text>{ item } </Text>
+            <Text style = {labelActiveTag}>{ item } </Text>
           </TouchableOpacity>
         ));
 
@@ -321,6 +325,7 @@ MultipleTags.propTypes = {
   selectCompletedMessage: PropTypes.string,
   sizeIconTag : PropTypes.number,
   showIconAdd : PropTypes.bool,
+  labelActiveTag : PropTypes.object
 };
 
 MultipleTags.defaultProps = {
@@ -330,6 +335,7 @@ MultipleTags.defaultProps = {
   defaultMessage: 'Press the down arrow button to pick a tag',
   sizeIconTag : 15,
   showIconAdd : true,
+  labelActiveTag : styles.labelActiveTag
 };
 
 export default MultipleTags;
