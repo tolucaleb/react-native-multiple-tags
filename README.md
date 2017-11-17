@@ -114,6 +114,8 @@ export default WelcomeComponent;
 | defaultMessage | No |  First Message to instruct what to do,
 | sizeIconTag | No |  Size Icon of add (plus) item,
 | showIconAdd | No |  Set false if you want hide the Add Icon,
+| labelActiveTag | No |  custom style for active tag label,
+| tagActiveStyle | No |  custom style for active tag,
 
 # Note
 Use this component inside a scrollview for it to maintain its auto height.
