@@ -179,7 +179,7 @@ class MultipleTags extends Component {
   }
 
   showAvailableTags() {
-    const { selectCompletedMessage, sizeIconTag } = this.props;
+    const { selectCompletedMessage, sizeIconTag, showIconAdd} = this.props;
     this.newValue = this.state.previousCharacter;
     this.filteredTags = [];
     this.selectedTag = this.state.selectedTag;
@@ -200,9 +200,7 @@ class MultipleTags extends Component {
             style={showEachAvailTags}
             onPress={() => this.addTag(item)}
           >
-            <Text style={eachTagIconAdd} >
-              <Icon name="ios-add-circle-outline" size={sizeIconTag} />
-            </Text>
+            {showIconAdd && <Text> <Icon name="ios-add-circle-outline" size={sizeIconTag} /> </Text> }
             <Text>{ item } </Text>
           </TouchableOpacity>
         ));
@@ -321,7 +319,8 @@ MultipleTags.propTypes = {
   title: PropTypes.string,
   defaultMessage: PropTypes.string,
   selectCompletedMessage: PropTypes.string,
-  sizeIconTag : PropTypes.number
+  sizeIconTag : PropTypes.number,
+  showIconAdd : PropTypes.bool,
 };
 
 MultipleTags.defaultProps = {
@@ -330,6 +329,7 @@ MultipleTags.defaultProps = {
   selectCompletedMessage: 'No match was found',
   defaultMessage: 'Press the down arrow button to pick a tag',
   sizeIconTag : 15,
+  showIconAdd : true,
 };
 
 export default MultipleTags;
