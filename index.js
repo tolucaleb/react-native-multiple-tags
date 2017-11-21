@@ -101,6 +101,9 @@ const styles = {
     justifyContent: 'flex-start',
     marginLeft: 5,
   },
+  labelActiveTag : {
+      fontSize : 14,
+  }
 
 };
 
@@ -138,6 +141,7 @@ class MultipleTags extends Component {
 
   componentWillMount() {
     this.setAvailableTags(this.props.tags);
+    this.setState({show : this.props.visibleOnOpen});
   }
 
   setAvailableTags(tags) {
@@ -179,7 +183,7 @@ class MultipleTags extends Component {
   }
 
   showAvailableTags() {
-    const { selectCompletedMessage } = this.props;
+    const { selectCompletedMessage, sizeIconTag, showIconAdd, labelActiveTag, tagActiveStyle } = this.props;
     this.newValue = this.state.previousCharacter;
     this.filteredTags = [];
     this.selectedTag = this.state.selectedTag;
@@ -197,13 +201,12 @@ class MultipleTags extends Component {
         (
           <TouchableOpacity
             key={item}
-            style={showEachAvailTags}
+            style={[showEachAvailTags, tagActiveStyle]}
             onPress={() => this.addTag(item)}
           >
-            <Text style={eachTagIconAdd} >
-              <Icon name="ios-add-circle-outline" size={15} />
-            </Text>
-            <Text>{ item } </Text>
+
+            {showIconAdd && <Text> <Icon name="ios-add-circle-outline" size={sizeIconTag} /> </Text> }
+            <Text style = {labelActiveTag}>{ item } </Text>
           </TouchableOpacity>
         ));
 
@@ -222,7 +225,7 @@ class MultipleTags extends Component {
   }
 
   showSelectedTags() {
-    const { defaultMessage } = this.props;
+    const { defaultMessage, sizeIconTag } = this.props;
     this.selectedTag = this.state.selectedTag;
     if (typeof this.selectedTag[this.selectedTag.length - 1] !== 'undefined') {
       const SelectedTags = this.selectedTag.map(item =>
@@ -234,7 +237,7 @@ class MultipleTags extends Component {
           >
             <Text>{item}</Text>
             <Text style={eachTagIcon} >
-              <Icon name="ios-trash-outline" size={15} />
+              <Icon name="ios-trash-outline" size={sizeIconTag} />
             </Text>
           </TouchableOpacity>
         ));
@@ -256,7 +259,7 @@ class MultipleTags extends Component {
   }
 
   render() {
-    const { search, title } = this.props;
+    const { search, title} = this.props;
     return (
       <View style={body}>
         <View style={textActionBtn}>
@@ -321,6 +324,11 @@ MultipleTags.propTypes = {
   title: PropTypes.string,
   defaultMessage: PropTypes.string,
   selectCompletedMessage: PropTypes.string,
+  sizeIconTag : PropTypes.number,
+  showIconAdd : PropTypes.bool,
+  labelActiveTag : PropTypes.object,
+  tagActiveStyle : PropTypes.object,
+  visibleOnOpen : PropTypes.bool,
 };
 
 MultipleTags.defaultProps = {
@@ -328,6 +336,11 @@ MultipleTags.defaultProps = {
   title: 'Tags',
   selectCompletedMessage: 'No match was found',
   defaultMessage: 'Press the down arrow button to pick a tag',
+  sizeIconTag : 15,
+  showIconAdd : true,
+  labelActiveTag : styles.labelActiveTag,
+  tagActiveStyle : {},
+  visibleOnOpen : false,
 };
 
 export default MultipleTags;

@@ -80,7 +80,7 @@ class WelcomeComponent extends Component {
           <View style={{ flex: 1 }}>
             <MultipleTags
               tags={tags}
-              search 
+              search
               onChangeItem={(content) => { this.setState({ content }); }}
               title="Fruits"
             />
@@ -112,6 +112,10 @@ export default WelcomeComponent;
 | title | No | The Name or Category of tags |
 | selectCompletedMessage | No | Text to display when search query hits nothing|
 | defaultMessage | No |  First Message to instruct what to do,
+| sizeIconTag | No |  Size Icon of add (plus) item,
+| showIconAdd | No |  Set false if you want hide the Add Icon,
+| labelActiveTag | No |  custom style for active tag label,
+| tagActiveStyle | No |  custom style for active tag,
 
 # Note
 Use this component inside a scrollview for it to maintain its auto height.
@@ -123,5 +127,3 @@ Use this component inside a scrollview for it to maintain its auto height.
 
 
 PR's are welcome
-
-
