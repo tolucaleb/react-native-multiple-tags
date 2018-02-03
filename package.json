@@ -1,6 +1,6 @@
 {
   "name": "react-native-multiple-tags",
-  "version": "0.0.3",
+  "version": "0.0.3.1",
   "description": "Multiple Select using Tags including default Selected Tags",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,5 @@
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.2.1",
     "prop-types": "^15.5.10",
-    "react": "^16.2.0",
-    "react-native": "^0.52.2"
   }
 }

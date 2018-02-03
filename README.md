@@ -5,9 +5,11 @@ Multiple Select using Tags
 Demo
 <p align="left">
    <img src="img/gif_1.gif" width="45%" />
-   <img src="img/gif_2.gif" width="45%" />
    <img src="img/img-2.png" width="45%" />
-   <img src="img/img-1.png" width="45%" />
+</p>
+<p align="left">
+   <img src="img/gif_2.gif" width="45%" />
+    <img src="img/img-1.png" width="45%" />
 </p>
 
 # Installation
