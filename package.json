@@ -1,6 +1,6 @@
 {
   "name": "react-native-multiple-tags",
-  "version": "0.0.3.1",
+  "version": "0.0.35",
   "description": "Multiple Select using Tags including default Selected Tags",
   "main": "index.js",
   "scripts": {
