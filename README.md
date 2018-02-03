@@ -4,8 +4,10 @@ Multiple Select using Tags
 
 Demo
 <p align="left">
-   <img src="img/gif_1.gif" width="48%" />
-   <img src="img/gif_2.gif" width="48%" />
+   <img src="img/gif_1.gif" width="45%" />
+   <img src="img/gif_2.gif" width="45%" />
+   <img src="img/img-2.PNG" width="45%" />
+   <img src="img/img-1.PNG" width="45%" />
 </p>
 
 # Installation
@@ -21,24 +23,10 @@ npm i -S react-native-multiple-tags
 import React, { Component } from 'react';
 import {
         View,
-        StatusBar,
-        ScrollView,
         Text,
 } from 'react-native';
 import MultipleTags from 'react-native-multiple-tags';
 
-const styles = {
-  body: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 80,
-    padding: 10,
-  },
-};
-
-const {
-  body,
- } = styles;
 
 const tags = [
   'cherry',
@@ -69,32 +57,17 @@ class WelcomeComponent extends Component {
 
   render() {
     return (
-
-      <View style={body}>
-        <StatusBar
-          translucent
-          backgroundColor="rgba(0,0,0,0.1)"
-          barStyle="light-content"
+      <View>
+        <MultipleTags
+          tags={tags}
+          search
+          onChangeItem={(content) => { this.setState({ content }); }}
+          title="Fruits"
         />
-        <ScrollView>
-          <View style={{ flex: 1 }}>
-            <MultipleTags
-              tags={tags}
-              search
-              onChangeItem={(content) => { this.setState({ content }); }}
-              title="Fruits"
-            />
-            {
-            (() => {
-              const textComponents = this.state.content.map(item => <Text> {item} </Text>);
-              return textComponents;
-            })()
+        {
+        (() => this.state.content.map(item => <Text key={item}> {item} </Text>) )()
         }
-          </View>
-        </ScrollView>
       </View>
-
-
     );
   }
 }
@@ -103,22 +76,25 @@ export default WelcomeComponent;
 ```
 
 ## Props
+---
+| Prop        | Required   | Types | Purpose  |
+| --- |---| ---|---|
+| tags      | Yes | array | List of tags/items to display for selection. |
+| preselectedTags      | No | array | List of tags/items to be selected on default. tags must be plain array in javascript check example above. |
+| search      | No      | boolean |  set search to false to hide the search bar. |
+| onChangeItem | Yes      | function | JavaScript function passed in as an argument. This function is called whenever items are added or removed in the component. |
+| title | No | string | The Name or Category of tags. |
+| iconAddName | No | string | Name of icon to be used instead of the regular +, icon name must be of Ionicons in react-native-vector-icons |
+| searchHitResponse | No | string | Text to display when search query hits nothing. |
+| defaultInstructionClosed | No | string | Text to instruct users what to do when closed |
+| defaultTotalRenderedTags | No | number | Total number of tags to show or render, default is 30
+| defaultInstructionOpen | No | string | Text to instruct users what to do when opened |
+| sizeIconTag | No | number |  Size Icon of add (plus) item. |
+| showIconAdd | No | boolean | Set false if you want hide the Add Icon. |
+| labelActiveTag | No | object | Custom style for active tag label. |
+| tagActiveStyle | No | object |  Custom style for active tag. |
+| visibleOnOpen | No | boolean | 
 
-| Prop        | Required   | Purpose  |
-| ------------- |-------------| -----|
-| tags      | Yes | List of tags/items to display for selection. tags must be plain array in javascript check example above. |
-| search      | No      |   set search to false to hide the search bar |
-| onChangeItem | Yes      |JavaScript function passed in as an argument. This function is called whenever items are added or removed in the component |
-| title | No | The Name or Category of tags |
-| selectCompletedMessage | No | Text to display when search query hits nothing|
-| defaultMessage | No |  First Message to instruct what to do,
-| sizeIconTag | No |  Size Icon of add (plus) item,
-| showIconAdd | No |  Set false if you want hide the Add Icon,
-| labelActiveTag | No |  custom style for active tag label,
-| tagActiveStyle | No |  custom style for active tag,
-
-# Note
-Use this component inside a scrollview for it to maintain its auto height.
 
 
 # Todo
