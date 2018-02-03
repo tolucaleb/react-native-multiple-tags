@@ -1,21 +1,16 @@
 import React, { Component } from 'react';
-import { View, TextInput, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, TextInput, Text, TouchableOpacity, FlatList, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+const { width } = Dimensions.get('window');
+
 const styles = {
-  body: {
-    flex: 1,
-    maxHeight: 130,
-  },
   showTagsWrapper: {
     minHeight: 40,
     maxHeight: 40,
     alignItems: 'center',
     flexDirection: 'row',
-  },
-  selectTagsWrapper: {
-    height: 70,
   },
   tagSearchWrapper: {
     flexDirection: 'row',
@@ -71,7 +66,7 @@ const styles = {
   showAvailTagsViewNotFound: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     padding: 10,
     paddingLeft: 0,
   },
@@ -84,6 +79,7 @@ const styles = {
     flexDirection: 'row',
     marginRight: 5,
     alignItems: 'center',
+    justifyContent: 'center',
     borderColor: '#d7d8d9',
     marginBottom: 2,
     marginTop: 2,
@@ -101,23 +97,20 @@ const styles = {
     justifyContent: 'flex-start',
     marginLeft: 5,
   },
-  labelActiveTag : {
-      fontSize : 14,
-  }
-
+  labelActiveTag: {
+    fontSize: 14,
+  },
 };
 
 const {
-  body,
   showTagsWrapper,
-  selectTagsWrapper,
   tagSearchWrapper,
   showTagsContainer,
   textInputStyle,
   iconStyle,
   textActionBtn,
   btnAction,
-  eachTagIconAdd,
+  labelActiveTag,
   eachTag,
   eachTagIcon,
   showAvailTagsView,
@@ -136,37 +129,78 @@ class MultipleTags extends Component {
       selectedTag: [],
       previousCharacter: '',
       show: false,
+      totalViewWidth: 0,
+      totalIndex: 0,
     };
   }
 
   componentWillMount() {
-    this.setAvailableTags(this.props.tags);
-    this.setState({show : this.props.visibleOnOpen});
+    this.setAvailableTags(this.props);
   }
 
-  setAvailableTags(tags) {
-    this.tags = tags;
-    this.setState({
-      tags: this.tags,
-      searchFilterTag: this.tags,
+  setAvailableTags({ tags, preselectedTags }) {
+    this.defaultTags = preselectedTags.map(item => item.toLowerCase());
+    this.allTags = tags.map(item => item.toLowerCase());
+    this.tags = tags.map(item => item.toLowerCase());
+    this.arr = [];
+
+    this.defaultTags.forEach((item) => {
+      if (this.tags.includes(item)) {
+        this.arr.push(item);
+      }
     });
+    for (let i = 0; i < this.arr.length; i += 1) {
+      const item = this.arr[i];
+      this.tags = this.tags.filter(value => value !== item);
+    }
+
+    this.setState({
+      tags: this.allTags,
+      searchFilterTag: this.tags,
+      selectedTag: this.arr,
+      show: this.props.visibleOnOpen,
+    }, this.setOnChangeValue);
   }
 
   setTagsBasedOnQuery(xhracter = '') {
-    this.newValue = xhracter;
     this.setState({
-      previousCharacter: this.newValue,
-    });
+      previousCharacter: xhracter,
+    }, this.scrollToFirstItem);
   }
 
   setOnChangeValue() {
     this.props.onChangeItem(this.state.selectedTag);
   }
 
+  ucwords(str) {
+    return (`${str}`).replace(/^([a-z])|\s+([a-z])/g, $1 => $1.toUpperCase());
+  }
+
+  scrollToFirstItem() {
+    if (this.showAvailableTagsRef) {
+      this.showAvailableTagsRef.scrollToOffset({ offset: 0 });
+    }
+  }
+
+  eachTagWidth(event, index) {
+    if (index) {
+      const formerWidth = this.state.totalViewWidth;
+      this.setState({
+        totalViewWidth: formerWidth + event.nativeEvent.layout.width,
+        totalIndex: index,
+      });
+    } else {
+      this.setState({
+        totalViewWidth: event.nativeEvent.layout.width,
+      });
+    }
+  }
+
   addTag(item) {
     this.selectedTag = this.state.selectedTag;
     this.tags = this.state.tags;
     this.arr = this.state.searchFilterTag.filter(value => value !== item);
+
     this.setState({
       searchFilterTag: this.arr,
       selectedTag: [item, ...this.selectedTag],
@@ -176,6 +210,7 @@ class MultipleTags extends Component {
   removeTag(item) {
     this.selectedTag = this.state.selectedTag.filter(value => value !== item);
     this.searchFilterTag = this.state.searchFilterTag;
+
     this.setState({
       selectedTag: this.selectedTag,
       searchFilterTag: [item, ...this.searchFilterTag],
@@ -183,71 +218,69 @@ class MultipleTags extends Component {
   }
 
   showAvailableTags() {
-    const { selectCompletedMessage, sizeIconTag, showIconAdd, labelActiveTag, tagActiveStyle } = this.props;
-    this.newValue = this.state.previousCharacter;
+    const { searchHitResponse, defaultTotalRenderedTags } = this.props;
+    this.newValue = this.state.previousCharacter.toLowerCase();
     this.filteredTags = [];
     this.selectedTag = this.state.selectedTag;
+
     this.state.tags.map((item) => {
       if (item.includes(this.newValue)) {
         if (!this.selectedTag.includes(item)) {
+          if (this.filteredTags.length > defaultTotalRenderedTags) {
+            return this.filteredTags;
+          }
           this.filteredTags.push(item);
         }
       }
+
       return this.filteredTags;
     });
-    this.searchFilterTag = this.filteredTags;
-    if (typeof this.searchFilterTag[this.searchFilterTag.length - 1] !== 'undefined') {
-      const AvailableTags = this.searchFilterTag.map(item =>
-        (
-          <TouchableOpacity
-            key={item}
-            style={[showEachAvailTags, tagActiveStyle]}
-            onPress={() => this.addTag(item)}
-          >
 
-            {showIconAdd && <Text> <Icon name="ios-add-circle-outline" size={sizeIconTag} /> </Text> }
-            <Text style = {labelActiveTag}>{ item } </Text>
-          </TouchableOpacity>
-        ));
-
+    if (this.filteredTags[this.filteredTags.length - 1] !== undefined) {
       return (
         <View style={showAvailTagsView}>
-          {AvailableTags}
+          <FlatList
+            ref={ref => this.showAvailableTagsRef = ref}
+            horizontal
+            data={this.filteredTags}
+            extraData={this.state.previousCharacter}
+            renderItem={data => this.renderItem(data)}
+            keyExtractor={data => data}
+            showsHorizontalScrollIndicator={false}
+            getItemLayout={(data, index) => (
+              { length: width, offset: this.state.totalViewHeight + (this.state.totalIndex * 5), index }
+              )}
+          />
         </View>
       );
     }
 
     return (
       <View style={showAvailTagsViewNotFound}>
-        <Text style={notFoundStyle}>{ selectCompletedMessage } </Text>
+        <Text style={notFoundStyle}>{ searchHitResponse } </Text>
       </View>
     );
   }
 
   showSelectedTags() {
-    const { defaultMessage, sizeIconTag } = this.props;
+    const { defaultInstructionClosed, defaultInstructionOpen } = this.props;
     this.selectedTag = this.state.selectedTag;
-    if (typeof this.selectedTag[this.selectedTag.length - 1] !== 'undefined') {
-      const SelectedTags = this.selectedTag.map(item =>
-        (
-          <TouchableOpacity
-            key={item}
-            style={eachTag}
-            onPress={() => this.removeTag(item)}
-          >
-            <Text>{item}</Text>
-            <Text style={eachTagIcon} >
-              <Icon name="ios-trash-outline" size={sizeIconTag} />
-            </Text>
-          </TouchableOpacity>
-        ));
 
-      return SelectedTags;
+    if (this.selectedTag[this.selectedTag.length - 1] !== undefined) {
+      return (
+        <FlatList
+          horizontal
+          data={this.selectedTag}
+          keyExtractor={data => data}
+          renderItem={data => this.renderSelectedItem(data)}
+          showsHorizontalScrollIndicator={false}
+        />
+      );
     }
 
     return (
       <View style={showAvailTagsViewNotFound}>
-        <Text style={notFoundStyle}>{ this.state.show ? 'pick a tag with the + icon' : defaultMessage } </Text>
+        <Text style={notFoundStyle}>{ this.state.show ? defaultInstructionOpen : defaultInstructionClosed } </Text>
       </View>
     );
   }
@@ -258,12 +291,53 @@ class MultipleTags extends Component {
     });
   }
 
-  render() {
-    const { search, title} = this.props;
+  renderItem(data) {
+    const { item, index } = data;
+    const {
+      sizeIconTag,
+      showIconAdd,
+      iconAddName,
+      tagActiveStyle,
+    } = this.props;
     return (
-      <View style={body}>
+      <TouchableOpacity
+        style={[showEachAvailTags, tagActiveStyle]}
+        onLayout={event => this.eachTagWidth(event, index)}
+        onPress={() => this.addTag(item)}
+      >
+        {
+          showIconAdd
+          &&
+          <Text>
+            <Icon name={iconAddName} size={sizeIconTag} />
+          </Text>
+        }
+        <Text style={labelActiveTag}> { this.ucwords(item) } </Text>
+      </TouchableOpacity>
+    );
+  }
+
+  renderSelectedItem(data) {
+    const { item } = data;
+    return (
+      <TouchableOpacity
+        style={eachTag}
+        onPress={() => this.removeTag(item)}
+      >
+        <Text> {this.ucwords(item)}</Text>
+        <Text style={eachTagIcon} >
+          <Icon name="ios-trash-outline" size={15} />
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+
+  render() {
+    const { search, title } = this.props;
+    return (
+      <View>
         <View style={textActionBtn}>
-          <Text> {title} </Text>
+          <Text onPress={() => this.changeVisibility()}>{title} </Text>
           <Text
             onPress={() => this.changeVisibility()}
             style={btnAction}
@@ -276,13 +350,11 @@ class MultipleTags extends Component {
           </Text>
         </View>
         <View style={showTagsWrapper}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {this.showSelectedTags()}
-          </ScrollView>
+          {this.showSelectedTags()}
         </View>
         {
           !this.state.show || (
-            <View style={selectTagsWrapper}>
+            <View>
               {
                 !search || (
                   this.state.searchFilterTag.length === 0 || (
@@ -292,9 +364,9 @@ class MultipleTags extends Component {
                         value={this.state.previousCharacter}
                         underlineColorAndroid="transparent"
                         onChangeText={value => this.setTagsBasedOnQuery(value)}
-                        placeholder="Search"
+                        placeholder="Search..."
                       />
-                      <Icon style={iconStyle} size={20} name="ios-search-outline" />
+                      <Icon style={iconStyle} size={10} name="ios-search-outline" />
                     </View>
                   )
                 )
@@ -303,9 +375,7 @@ class MultipleTags extends Component {
               {
                 this.state.searchFilterTag.length === 0 || (
                   <View style={showTagsContainer}>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                       {this.showAvailableTags()}
-                    </ScrollView>
                   </View>
                 )
               }
@@ -319,28 +389,36 @@ class MultipleTags extends Component {
 
 MultipleTags.propTypes = {
   tags: PropTypes.array.isRequired,
+  preselectedTags: PropTypes.array,
   onChangeItem: PropTypes.func.isRequired,
   search: PropTypes.bool,
   title: PropTypes.string,
-  defaultMessage: PropTypes.string,
-  selectCompletedMessage: PropTypes.string,
-  sizeIconTag : PropTypes.number,
-  showIconAdd : PropTypes.bool,
-  labelActiveTag : PropTypes.object,
-  tagActiveStyle : PropTypes.object,
-  visibleOnOpen : PropTypes.bool,
+  defaultInstructionClosed: PropTypes.string,
+  defaultInstructionOpen: PropTypes.string,
+  defaultTotalRenderedTags: PropTypes.number,
+  searchHitResponse: PropTypes.string,
+  sizeIconTag: PropTypes.number,
+  showIconAdd: PropTypes.bool,
+  iconAddName: PropTypes.string,
+  labelActiveTag: PropTypes.object,
+  tagActiveStyle: PropTypes.object,
+  visibleOnOpen: PropTypes.bool,
 };
 
 MultipleTags.defaultProps = {
+  preselectedTags: [],
   search: true,
   title: 'Tags',
-  selectCompletedMessage: 'No match was found',
-  defaultMessage: 'Press the down arrow button to pick a tag',
-  sizeIconTag : 15,
-  showIconAdd : true,
-  labelActiveTag : styles.labelActiveTag,
-  tagActiveStyle : {},
-  visibleOnOpen : false,
+  searchHitResponse: 'No match was found',
+  defaultInstructionClosed: 'Press the down arrow button to pick a tag',
+  defaultInstructionOpen: 'Pick a tag with the + icon',
+  sizeIconTag: 15,
+  showIconAdd: true,
+  iconAddName: 'ios-add-circle-outline',
+  defaultTotalRenderedTags: 30,
+  labelActiveTag,
+  tagActiveStyle: {},
+  visibleOnOpen: false,
 };
 
 export default MultipleTags;
