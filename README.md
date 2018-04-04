@@ -2,15 +2,12 @@
 Multiple Select using Tags
 
 
-Demo
-<p align="left">
-   <img src="img/gif_1.gif" width="45%" />
-   <img src="img/img-2.png" width="45%" />
-</p>
-<p align="left">
-   <img src="img/gif_2.gif" width="45%" />
-    <img src="img/img-1.png" width="45%" />
-</p>
+# Demo
+ <img src="img/img-2.png" />
+ <img src="img/gif_1.gif" /> 
+ <img src="img/gif_2.gif" />
+ <img src="img/img-1.png" />
+
 
 # Installation
 ```s
@@ -48,12 +45,52 @@ const tags = [
   'lemon',
 ];
 
+const objectTags = [
+  {
+    key: 'id_01',
+    value: 'cherry',
+  },
+  {
+    key: 'id_02',
+    value: 'mango',
+  },
+  {
+    key: 'id_03',
+    value: 'cashew',
+  },
+  {
+    key: 'id_04',
+    value: 'almond'
+  },
+  {
+    key: 'id_05',
+    value: 'guava'
+  },
+  {
+    key: 'id_06',
+    value: 'pineapple'
+  },
+  {
+    key: 'id_07',
+    value: 'orange'
+  },
+  {
+    key: 'id_08',
+    value: 'pear'
+  },
+  {
+    key: 'id_09',
+    value: 'date'
+  }
+]
+
 
 class WelcomeComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       content: [],
+      contentx: [],
     };
   }
 
@@ -61,13 +98,22 @@ class WelcomeComponent extends Component {
     return (
       <View>
         <MultipleTags
+            tags={objectTags}
+            search
+            onChangeItem={(content) => { this.setState({ content }); }}
+            title="Fruits"
+          />
+          {
+          (() => this.state.content.map(item => <Text key={item.key}> {item.key}: {item.value} </Text>))()
+          }
+        <MultipleTags
           tags={tags}
           search
-          onChangeItem={(content) => { this.setState({ content }); }}
+          onChangeItem={(contentx) => { this.setState({ contentx }); }}
           title="Fruits"
         />
         {
-        (() => this.state.content.map(item => <Text key={item}> {item} </Text>) )()
+        (() => this.state.contentx.map(item => <Text key={item}> {item} </Text>) )()
         }
       </View>
     );
@@ -81,8 +127,10 @@ export default WelcomeComponent;
 ---
 | Prop        | Required   | Types | Purpose  |
 | --- |---| ---|---|
-| tags      | Yes | array | List of tags/items to display for selection. |
-| preselectedTags      | No | array | List of tags/items to be selected on default. tags must be plain array in javascript check example above. |
+| tags      | Yes | array | List of tags/items to display for selection. This can be array of objects or just an array of strings |
+| preselectedTags      | No | array | List of tags/items to be selected on default. tags can be  array of objects or array of strings. |
+| objectKeyIdentifier | No | string |  when using array of objects you can signify the key property of the object i.e objectTags = `[{ id: 'id_01', name: 'cherry' }]` and that becomes `objectKeyIdentifier = 'id'`  , default is key |
+| objectValueIdentifier | No | string | when using array of objects you can signify the value property of the object i.e objectTags = `[{ id: 'id_01', name: 'cherry' }]` and that becomes `objectValueIdentifier = 'name'`,  default is value |
 | search      | No      | boolean |  set search to false to hide the search bar. |
 | onChangeItem | Yes      | function | JavaScript function passed in as an argument. This function is called whenever items are added or removed in the component. |
 | title | No | string | The Name or Category of tags. |
@@ -101,7 +149,7 @@ export default WelcomeComponent;
 
 # Todo
 
-- [ ] Supports array of objects.
+- [x] Supports array of objects.
 
 
 PR's are welcome
