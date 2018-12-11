@@ -1,31 +1,38 @@
-import React, { Component } from 'react';
-import { View, TextInput, Text, TouchableOpacity, FlatList, Dimensions } from 'react-native';
-import PropTypes from 'prop-types';
-import Icon from 'react-native-vector-icons/Ionicons';
+import React, { Component } from "react";
+import {
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Dimensions
+} from "react-native";
+import PropTypes from "prop-types";
+import Icon from "react-native-vector-icons/Ionicons";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const styles = {
   showTagsWrapper: {
     minHeight: 40,
     maxHeight: 40,
-    alignItems: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    flexDirection: "row"
   },
   tagSearchWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingLeft: 10,
     paddingTop: 0,
     borderRadius: 3,
     maxHeight: 30,
     height: 30,
     borderWidth: 1,
-    borderColor: '#d4d5d6',
-    marginBottom: 5,
+    borderColor: "#d4d5d6",
+    marginBottom: 5
   },
   showTagsContainer: {
-    height: 30,
+    height: 30
   },
   textInputStyle: {
     flex: 1,
@@ -33,14 +40,14 @@ const styles = {
     height: 30,
     maxHeight: 30,
     padding: 0,
-    textAlignVertical: 'center',
+    textAlignVertical: "center"
     // backgroundColor: 'blue',
   },
   iconStyle: {
     flex: 1,
     maxWidth: 20,
     marginRight: 5,
-    textAlign: 'center',
+    textAlign: "center"
   },
   eachTag: {
     padding: 2,
@@ -48,29 +55,29 @@ const styles = {
     paddingLeft: 5,
     borderRadius: 2,
     borderWidth: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     marginRight: 5,
-    alignItems: 'center',
-    borderColor: '#d7d8d9',
+    alignItems: "center",
+    borderColor: "#d7d8d9"
   },
   eachTagIcon: {
-    color: '#676869',
-    marginLeft: 5,
+    color: "#676869",
+    marginLeft: 5
   },
   eachTagIconAdd: {
-    color: '#676869',
-    marginRight: 5,
+    color: "#676869",
+    marginRight: 5
   },
   showAvailTagsView: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center"
   },
   showAvailTagsViewNotFound: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
+    justifyContent: "center",
+    alignItems: "flex-start",
     padding: 10,
-    paddingLeft: 0,
+    paddingLeft: 0
   },
   showEachAvailTags: {
     padding: 2,
@@ -78,30 +85,30 @@ const styles = {
     paddingLeft: 5,
     borderRadius: 2,
     borderWidth: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     marginRight: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: '#d7d8d9',
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#d7d8d9",
     marginBottom: 2,
-    marginTop: 2,
+    marginTop: 2
   },
   notFoundStyle: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500"
   },
   textActionBtn: {
     maxHeight: 20,
-    flexDirection: 'row',
+    flexDirection: "row"
   },
   btnAction: {
     lineHeight: 20,
-    justifyContent: 'flex-start',
-    marginLeft: 5,
+    justifyContent: "flex-start",
+    marginLeft: 5
   },
   labelActiveTag: {
-    fontSize: 14,
-  },
+    fontSize: 14
+  }
 };
 
 const {
@@ -118,9 +125,8 @@ const {
   showAvailTagsView,
   showEachAvailTags,
   notFoundStyle,
-  showAvailTagsViewNotFound,
+  showAvailTagsViewNotFound
 } = styles;
-
 
 class MultipleTags extends Component {
   constructor(props) {
@@ -129,12 +135,11 @@ class MultipleTags extends Component {
       tags: [],
       searchFilterTag: [],
       selectedTag: [],
-      previousCharacter: '',
+      previousCharacter: "",
       show: false,
       totalViewWidth: 0,
       totalIndex: 0,
-      object: false,
-
+      object: false
     };
   }
 
@@ -142,30 +147,55 @@ class MultipleTags extends Component {
     this.setAvailableTags(this.props);
   }
 
-  setAvailableTags({ tags, preselectedTags, objectValueIdentifier, objectKeyIdentifier }) {
+  setAvailableTags({
+    tags,
+    preselectedTags,
+    objectValueIdentifier,
+    objectKeyIdentifier
+  }) {
     let object = false;
-    object = typeof tags[0] === 'object';
-    this.defaultTags = preselectedTags
-      .map(item => (object ? {
-        [objectKeyIdentifier]: item[objectKeyIdentifier],
-        [objectValueIdentifier]: item[objectValueIdentifier].toLowerCase(),
-      } : item.toLowerCase()));
-    this.allTags = tags
-      .map(item => (object ? {
-        [objectKeyIdentifier]: item[objectKeyIdentifier],
-        [objectValueIdentifier]: item[objectValueIdentifier].toLowerCase(),
-      } : item.toLowerCase()));
-    this.tags = tags
-      .map(item => (object ? {
-        [objectKeyIdentifier]: item[objectKeyIdentifier],
-        [objectValueIdentifier]: item[objectValueIdentifier].toLowerCase(),
-      } : item.toLowerCase()));
+    object = typeof tags[0] === "object";
+    this.defaultTags = preselectedTags.map(
+      (item, index) =>
+        object
+          ? {
+              [objectKeyIdentifier]: this.props.generateAutoKey
+                ? index.toString()
+                : item[objectKeyIdentifier],
+              [objectValueIdentifier]: item[objectValueIdentifier].toLowerCase()
+            }
+          : item.toLowerCase()
+    );
+    this.allTags = tags.map(
+      (item, index) =>
+        object
+          ? {
+              [objectKeyIdentifier]: this.props.generateAutoKey
+                ? index.toString()
+                : item[objectKeyIdentifier],
+              [objectValueIdentifier]: item[objectValueIdentifier].toLowerCase()
+            }
+          : item.toLowerCase()
+    );
+    this.tags = tags.map(
+      (item, index) =>
+        object
+          ? {
+              [objectKeyIdentifier]: this.props.generateAutoKey
+                ? index.toString()
+                : item[objectKeyIdentifier],
+              [objectValueIdentifier]: item[objectValueIdentifier].toLowerCase()
+            }
+          : item.toLowerCase()
+    );
     this.arr = [];
 
-    this.defaultTags.forEach((item) => {
+    this.defaultTags.forEach(item => {
       if (
         object
-          ? this.tags.some(x => x[objectKeyIdentifier] === item[objectKeyIdentifier])
+          ? this.tags.some(
+              x => x[objectKeyIdentifier] === item[objectKeyIdentifier]
+            )
           : this.tags.includes(item)
       ) {
         this.arr.push(item);
@@ -173,27 +203,33 @@ class MultipleTags extends Component {
     });
     for (let i = 0; i < this.arr.length; i += 1) {
       const item = this.arr[i];
-      this.tags = this.tags
-        .filter(value => (
+      this.tags = this.tags.filter(
+        value =>
           object
             ? value[objectKeyIdentifier] !== item[objectKeyIdentifier]
-            : value !== item),
-        );
+            : value !== item
+      );
     }
 
-    this.setState({
-      tags: this.allTags,
-      searchFilterTag: this.tags,
-      selectedTag: this.arr,
-      object,
-      show: this.props.visibleOnOpen,
-    }, this.setOnChangeValue);
+    this.setState(
+      {
+        tags: this.allTags,
+        searchFilterTag: this.tags,
+        selectedTag: this.arr,
+        object,
+        show: this.props.visibleOnOpen
+      },
+      this.setOnChangeValue
+    );
   }
 
-  setTagsBasedOnQuery(xhracter = '') {
-    this.setState({
-      previousCharacter: xhracter,
-    }, this.scrollToFirstItem);
+  setTagsBasedOnQuery(xhracter = "") {
+    this.setState(
+      {
+        previousCharacter: xhracter
+      },
+      this.scrollToFirstItem
+    );
   }
 
   setOnChangeValue() {
@@ -201,7 +237,7 @@ class MultipleTags extends Component {
   }
 
   ucwords(str) {
-    return (`${str}`).replace(/^([a-z])|\s+([a-z])/g, $1 => $1.toUpperCase());
+    return `${str}`.replace(/^([a-z])|\s+([a-z])/g, $1 => $1.toUpperCase());
   }
 
   scrollToFirstItem() {
@@ -215,11 +251,11 @@ class MultipleTags extends Component {
       const formerWidth = this.state.totalViewWidth;
       this.setState({
         totalViewWidth: formerWidth + event.nativeEvent.layout.width,
-        totalIndex: index,
+        totalIndex: index
       });
     } else {
       this.setState({
-        totalViewWidth: event.nativeEvent.layout.width,
+        totalViewWidth: event.nativeEvent.layout.width
       });
     }
   }
@@ -228,43 +264,53 @@ class MultipleTags extends Component {
     const { selectedTag, object, searchFilterTag } = this.state;
     const { objectValueIdentifier } = this.props;
 
-
-    this.arr = searchFilterTag
-      .filter(value => (object
-        ? value[objectValueIdentifier] !== item[objectValueIdentifier]
-        : value !== item
-      ),
-      );
-    this.setState({
-      searchFilterTag: this.arr,
-      selectedTag: [item, ...selectedTag],
-    }, this.setOnChangeValue);
+    this.arr = searchFilterTag.filter(
+      value =>
+        object
+          ? value[objectValueIdentifier] !== item[objectValueIdentifier]
+          : value !== item
+    );
+    this.setState(
+      {
+        searchFilterTag: this.arr,
+        selectedTag: [item, ...selectedTag]
+      },
+      this.setOnChangeValue
+    );
   }
 
   removeTag(item) {
     const { objectValueIdentifier } = this.props;
     const { selectedTag, object, searchFilterTag } = this.state;
 
-    this.selectedTag = selectedTag
-      .filter(value => (
+    this.selectedTag = selectedTag.filter(
+      value =>
         object
           ? value[objectValueIdentifier] !== item[objectValueIdentifier]
           : value !== item
-      ));
+    );
 
-    this.setState({
-      selectedTag: this.selectedTag,
-      searchFilterTag: [item, ...searchFilterTag],
-    }, this.setOnChangeValue);
+    this.setState(
+      {
+        selectedTag: this.selectedTag,
+        searchFilterTag: [item, ...searchFilterTag]
+      },
+      this.setOnChangeValue
+    );
   }
 
   showAvailableTags() {
-    const { searchHitResponse, defaultTotalRenderedTags, objectValueIdentifier, objectKeyIdentifier } = this.props;
+    const {
+      searchHitResponse,
+      defaultTotalRenderedTags,
+      objectValueIdentifier,
+      objectKeyIdentifier
+    } = this.props;
     const { object, tags, selectedTag, previousCharacter } = this.state;
     this.newValue = previousCharacter.toLowerCase();
     this.filteredTags = [];
 
-    tags.map((item) => {
+    tags.map(item => {
       if (
         object
           ? item[objectValueIdentifier].includes(this.newValue)
@@ -272,7 +318,9 @@ class MultipleTags extends Component {
       ) {
         if (
           object
-            ? !selectedTag.some(x => x[objectValueIdentifier] === item[objectValueIdentifier])
+            ? !selectedTag.some(
+                x => x[objectValueIdentifier] === item[objectValueIdentifier]
+              )
             : !selectedTag.includes(item)
         ) {
           if (this.filteredTags.length > defaultTotalRenderedTags) {
@@ -288,20 +336,18 @@ class MultipleTags extends Component {
       return (
         <View style={showAvailTagsView}>
           <FlatList
-            ref={ref => this.showAvailableTagsRef = ref}
+            ref={ref => (this.showAvailableTagsRef = ref)}
             horizontal
             data={this.filteredTags}
             extraData={previousCharacter}
             renderItem={data => this.renderItem(data)}
             keyExtractor={data => (object ? data[objectKeyIdentifier] : data)}
             showsHorizontalScrollIndicator={false}
-            getItemLayout={(data, index) => (
-              {
-                length: width,
-                offset: this.state.totalViewHeight + (this.state.totalIndex * 5),
-                index,
-              }
-            )}
+            getItemLayout={(data, index) => ({
+              length: width,
+              offset: this.state.totalViewHeight + this.state.totalIndex * 5,
+              index
+            })}
           />
         </View>
       );
@@ -309,13 +355,17 @@ class MultipleTags extends Component {
 
     return (
       <View style={showAvailTagsViewNotFound}>
-        <Text style={notFoundStyle}>{ searchHitResponse } </Text>
+        <Text style={notFoundStyle}>{searchHitResponse} </Text>
       </View>
     );
   }
 
   showSelectedTags() {
-    const { defaultInstructionClosed, defaultInstructionOpen, objectKeyIdentifier } = this.props;
+    const {
+      defaultInstructionClosed,
+      defaultInstructionOpen,
+      objectKeyIdentifier
+    } = this.props;
     const { selectedTag, show, object } = this.state;
 
     if (selectedTag[selectedTag.length - 1] !== undefined) {
@@ -333,7 +383,7 @@ class MultipleTags extends Component {
     return (
       <View style={showAvailTagsViewNotFound}>
         <Text style={notFoundStyle}>
-          { show ? defaultInstructionOpen : defaultInstructionClosed }
+          {show ? defaultInstructionOpen : defaultInstructionClosed}
         </Text>
       </View>
     );
@@ -341,7 +391,7 @@ class MultipleTags extends Component {
 
   changeVisibility() {
     this.setState({
-      show: !this.state.show,
+      show: !this.state.show
     });
   }
 
@@ -351,7 +401,7 @@ class MultipleTags extends Component {
       sizeIconTag,
       showIconAdd,
       iconAddName,
-      tagActiveStyle,
+      tagActiveStyle
     } = this.props;
     const { object } = this.state;
     const { objectValueIdentifier } = this.props;
@@ -362,14 +412,17 @@ class MultipleTags extends Component {
         onLayout={event => this.eachTagWidth(event, index)}
         onPress={() => this.addTag(item)}
       >
-        {
-          showIconAdd
-          &&
+        {showIconAdd && (
           <Text>
             <Icon name={iconAddName} size={sizeIconTag} />
           </Text>
-        }
-        <Text style={labelActiveTag}> { object ? this.ucwords(item[objectValueIdentifier]) : this.ucwords(item) }</Text>
+        )}
+        <Text style={labelActiveTag}>
+          {" "}
+          {object
+            ? this.ucwords(item[objectValueIdentifier])
+            : this.ucwords(item)}
+        </Text>
       </TouchableOpacity>
     );
   }
@@ -379,12 +432,14 @@ class MultipleTags extends Component {
     const { object } = this.state;
     const { objectValueIdentifier } = this.props;
     return (
-      <TouchableOpacity
-        style={eachTag}
-        onPress={() => this.removeTag(item)}
-      >
-        <Text> { object ? this.ucwords(item[objectValueIdentifier]) : this.ucwords(item) }</Text>
-        <Text style={eachTagIcon} >
+      <TouchableOpacity style={eachTag} onPress={() => this.removeTag(item)}>
+        <Text>
+          {" "}
+          {object
+            ? this.ucwords(item[objectValueIdentifier])
+            : this.ucwords(item)}
+        </Text>
+        <Text style={eachTagIcon}>
           <Icon name="ios-trash-outline" size={15} />
         </Text>
       </TouchableOpacity>
@@ -398,50 +453,40 @@ class MultipleTags extends Component {
       <View>
         <View style={textActionBtn}>
           <Text onPress={() => this.changeVisibility()}>{title} </Text>
-          <Text
-            onPress={() => this.changeVisibility()}
-            style={btnAction}
-          >
+          <Text onPress={() => this.changeVisibility()} style={btnAction}>
             <Icon
               style={iconStyle}
               size={20}
-              name={this.state.show ? 'ios-arrow-dropup-outline' : 'ios-arrow-dropdown-outline'}
+              name={
+                this.state.show
+                  ? "ios-arrow-dropup-outline"
+                  : "ios-arrow-dropdown-outline"
+              }
             />
           </Text>
         </View>
-        <View style={showTagsWrapper}>
-          {this.showSelectedTags()}
-        </View>
-        {
-          !show || (
-            <View>
-              {
-                !search || (
-                  searchFilterTag.length === 0 || (
-                    <View style={tagSearchWrapper}>
-                      <TextInput
-                        style={textInputStyle}
-                        value={previousCharacter}
-                        underlineColorAndroid="transparent"
-                        onChangeText={value => this.setTagsBasedOnQuery(value)}
-                        placeholder="search..."
-                      />
-                      <Icon style={iconStyle} size={15} name="ios-search-outline" />
-                    </View>
-                  )
-                )
-              }
+        <View style={showTagsWrapper}>{this.showSelectedTags()}</View>
+        {!show || (
+          <View>
+            {!search ||
+              (searchFilterTag.length === 0 || (
+                <View style={tagSearchWrapper}>
+                  <TextInput
+                    style={textInputStyle}
+                    value={previousCharacter}
+                    underlineColorAndroid="transparent"
+                    onChangeText={value => this.setTagsBasedOnQuery(value)}
+                    placeholder="search..."
+                  />
+                  <Icon style={iconStyle} size={15} name="ios-search-outline" />
+                </View>
+              ))}
 
-              {
-                searchFilterTag.length === 0 || (
-                  <View style={showTagsContainer}>
-                    {this.showAvailableTags()}
-                  </View>
-                )
-              }
-            </View>
-          )
-        }
+            {searchFilterTag.length === 0 || (
+              <View style={showTagsContainer}>{this.showAvailableTags()}</View>
+            )}
+          </View>
+        )}
       </View>
     );
   }
@@ -465,24 +510,26 @@ MultipleTags.propTypes = {
   visibleOnOpen: PropTypes.bool,
   objectValueIdentifier: PropTypes.string,
   objectKeyIdentifier: PropTypes.string,
+  generateAutoKey: PropTypes.bool
 };
 
 MultipleTags.defaultProps = {
   preselectedTags: [],
   search: true,
-  title: 'Tags',
-  searchHitResponse: 'No match was found',
-  defaultInstructionClosed: 'Press the down arrow button to pick a tag',
-  defaultInstructionOpen: 'Pick a tag with the + icon',
+  title: "Tags",
+  searchHitResponse: "No match was found",
+  defaultInstructionClosed: "Press the down arrow button to pick a tag",
+  defaultInstructionOpen: "Pick a tag with the + icon",
   sizeIconTag: 15,
   showIconAdd: true,
-  iconAddName: 'ios-add-circle-outline',
+  iconAddName: "ios-add-circle-outline",
   defaultTotalRenderedTags: 30,
   labelActiveTag,
   tagActiveStyle: {},
   visibleOnOpen: false,
-  objectValueIdentifier: 'value',
-  objectKeyIdentifier: 'key',
+  objectValueIdentifier: "value",
+  objectKeyIdentifier: "key",
+  generateAutoKey: false
 };
 
 export default MultipleTags;

@@ -143,7 +143,8 @@ export default WelcomeComponent;
 | showIconAdd | No | boolean | Set false if you want hide the Add Icon. |
 | labelActiveTag | No | object | Custom style for active tag label. |
 | tagActiveStyle | No | object |  Custom style for active tag. |
-| visibleOnOpen | No | boolean | 
+| visibleOnOpen | No | boolean |
+| generateAutoKey | No | boolean | If array is including strings, that can generate key automatically. Default value is false |
 
 
 
